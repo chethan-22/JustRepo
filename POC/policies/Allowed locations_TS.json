@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "listOfAllowedLocations": {
+            "type": "array",
+            "metadata": {
+                "description": "The list of locations that can be specified when deploying resources.",
+                "displayName": "Allowed locations"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Allowed locations",
+            "properties": {
+                "displayName": "Allowed locations",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c",
+                "description": "This policy enables you to restrict the locations your organization can specify when deploying resources. Use to enforce your geo-compliance requirements. Excludes resource groups, Microsoft.AzureActiveDirectory/b2cDirectories, and resources that use the 'global' region.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "General"
+                },
+                "parameters": {
+                    "listOfAllowedLocations": {
+                        "value": "[parameters('listOfAllowedLocations')]"
+                    }
+                }
+            }
+        }
+    ]
+}

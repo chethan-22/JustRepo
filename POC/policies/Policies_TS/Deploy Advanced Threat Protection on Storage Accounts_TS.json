@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "DeployIfNotExists",
+                "Disabled"
+            ],
+            "defaultValue": "DeployIfNotExists"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Deploy Defender for Storage (Classic) on storage accounts",
+            "properties": {
+                "displayName": "Deploy Defender for Storage (Classic) on storage accounts",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/361c2074-3595-4e5d-8cab-4f21dffc835c",
+                "description": "This policy enables Defender for Storage (Classic) on storage accounts.",
+                "metadata": {
+                    "version": "1.0.1",
+                    "category": "Storage"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

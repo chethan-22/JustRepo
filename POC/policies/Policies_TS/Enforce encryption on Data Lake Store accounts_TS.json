@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "RequireencryDataLakeacco",
+            "properties": {
+                "displayName": "Require encryption on Data Lake Store accounts",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a7ff3161-0087-490a-9ad9-ad6217f4f43a",
+                "description": "This policy ensures encryption is enabled on all Data Lake Store accounts",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Data Lake"
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}

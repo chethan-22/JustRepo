@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managementGroupName1": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the first management group."
+            }
+        },
+        "managementGroupName2": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the second management group."
+            }
+        },
+        "policyDefinitionId1": {
+            "type": "string",
+            "metadata": {
+                "description": "The ID of the first policy definition."
+            }
+        },
+        "policyDefinitionId2": {
+            "type": "string",
+            "metadata": {
+                "description": "The ID of the second policy definition."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2018-05-01",
+            "name": "infraEncryptionPolicyAssignment",
+            "properties": {
+                "displayName": "Storage Accounts Infrastructure Encryption Policy",
+                "policyDefinitionId": {
+                    "value": "[parameters('policyDefinitionId1')]"
+                },
+                "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('managementGroupName1'))]",
+                "description": "Policy to audit infrastructure encryption for storage accounts in the first management group."
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2022-06-01",
+            "name": "secureTransferPolicyAssignment",
+            "properties": {
+                "displayName": "Secure Transfer to Storage Accounts Policy",
+                "policyDefinitionId": {
+                    "value": "[parameters('policyDefinitionId2')]"
+                },
+                "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('managementGroupName2'))]",
+                "description": "Policy to audit secure transfer to storage accounts in the second management group."
+            }
+        }
+    ],
+    "outputs": {}
+}

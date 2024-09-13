@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "Audit",
+                "Disabled"
+              ],
+              "defaultValue": "Audit"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Storage Accounts should use a virtual network service endpoint",
+            "properties": {
+                "displayName": "Storage Accounts should use a virtual network service endpoint",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/60d21c4f-21a3-4d94-85f4-b924e6aeeda4",
+                "description": "This policy audits any Storage Account not configured to use a virtual network service endpoint.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Network"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

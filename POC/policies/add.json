@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tagName": {
+            "type": "string",
+            "metadata": {
+                "displayName": "Tag Name",
+                "description": "Name of the tag, such as 'environment'"
+              },
+              "defaultValue": "tagname"
+        },
+            "tagValue": {
+              "type": "string",
+              "metadata": {
+                "displayName": "Tag Value",
+                "description": "Value of the tag, such as 'production'"
+              },
+              "defaultValue": "c.b.n"
+        }
+    
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Add or replace a tag on resources",
+            "properties": {
+                "displayName": "Add or replace a tag on resources",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/5ffd78d9-436d-4b41-a421-5baa819e3008",
+                "description": "Adds or replaces the specified tag and value when any resource is created or updated. Existing resources can be remediated by triggering a remediation task. Does not modify tags on resource groups.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Tags"
+                },
+                "parameters": {
+                    "tagName": {
+                        "value": "[parameters('tagName')]"
+                    },
+                    "tagValue": {
+                        "value": "[parameters('tagValue')]"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "DeployIfNotExists",
+                "Disabled"
+            ],
+            "defaultValue": "DeployIfNotExists"
+        },
+        "managedIdentity": {
+            "type": "string",
+            "metadata": {
+                "description": "Managed identity used for remediation (for 'DeployIfNotExists' effect)"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the resources."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "[guid('DeploySQLDBTransparentDataEncryption')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "displayName": "Deploy SQL DB transparent data encryption",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/86a912f6-9a06-4e26-b447-11b16ba8659f",
+                "scope": "/subscriptions/8478f485-04bc-46d6-8c16-1b59c3faa1e4/resourceGroups/RG-DEV-AUTOMATION-001",
+                "description": "Enables transparent data encryption on SQL databases",
+                "metadata": {
+                    "version": "2.2.0",
+                    "category": "SQL"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2017-05-01",
+            "name": "[guid('DeploySQLDBTransparent')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/9b7fa17d-e63e-47b0-bb0a-15c516ac86ec",
+                "principalId": "c181bdc7-3df6-4e85-9c7e-c7645a79663b",
+                "scope": "/subscriptions/8478f485-04bc-46d6-8c16-1b59c3faa1e4/resourceGroups/RG-DEV-AUTOMATION-001"
+            }
+        }
+    ]
+}

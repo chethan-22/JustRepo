@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "listOfImageIdToInclude": {
+            "type": "array",
+            "metadata": {
+                "description": "Example value: '/subscriptions/<subscriptionId>/resourceGroups/YourResourceGroup/providers/Microsoft.Compute/images/ContosoStdImage'",
+                "displayName": "Optional: List of virtual machine images that have supported Windows OS to add to scope"
+            },
+            "defaultValue": []
+        },
+        "effect": {
+            "type": "string",
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            },
+            "allowedValues": [
+              "DeployIfNotExists",
+              "Disabled"
+            ],
+            "defaultValue": "DeployIfNotExists"
+          }
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Deploy - Configure Dependency agent to be enabled on Windows virtual machines",
+            "properties": {
+                "displayName": "Deploy - Configure Dependency agent to be enabled on Windows virtual machines",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1c210e94-a481-4beb-95fa-1571b434fb04",
+                "description": "Deploy Dependency agent for Windows virtual machines if the virtual machine image is in the list defined and the agent is not installed.",
+                "metadata": {
+                    "version": "3.1.0",
+                    "category": "Monitoring"
+                },
+                "parameters": {
+                    "listOfImageIdToInclude": {
+                        "value": "[parameters('listOfImageIdToInclude')]"
+                    },
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

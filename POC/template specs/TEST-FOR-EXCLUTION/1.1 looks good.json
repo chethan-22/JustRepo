@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "Audit",
+                "Disabled"
+            ],
+            "defaultValue": "Audit"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "SSHaccessfromtheInternet",
+            "properties": {
+                "displayName": "SSH access from the Internet should be blocked",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2c89a2e5-7285-40fe-afe0-ae8654b92fab",
+                "description": "This policy is deprecated. This policy audits any network security rule that allows SSH access from Internet",
+                "metadata": {
+                    "version": "2.0.0-deprecated",
+                    "category": "Network",
+                    "deprecated": true
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tagName": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Tag Name",
+                "description": "Name of the tag, such as 'environment'"
+            },
+            "defaultValue": "test"
+        },
+        "tagValue": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Tag Value",
+                "description": "Value of the tag, such as 'production'"
+            },
+            "defaultValue": "test"
+        },
+        "managedIdentity": {
+            "defaultValue": "SystemAssigned",
+            "type": "string",
+            "metadata": {
+                "description": "Managed identity used for remediation (for 'DeployIfNotExists' effect)"
+            }
+        },
+        "location": {
+            "defaultValue": "North Europe",
+            "type": "string",
+            "metadata": {
+                "description": "Location for the resources."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Add or replace a tag on resources",
+            "properties": {
+                "displayName": "Add or replace a tag on resources",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/5ffd78d9-436d-4b41-a421-5baa819e3008",
+                "description": "Adds or replaces the specified tag and value when any resource is created or updated. Existing resources can be remediated by triggering a remediation task. Does not modify tags on resource groups.",
+                "scope": "/subscriptions/029536b6-f6c6-4f73-af5f-565d7c4cc579/resourceGroups/rg-dev-fusion-001",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Tags"
+                },
+                "parameters": {
+                    "tagName": {
+                        "value": "[parameters('tagName')]"
+                    },
+                    "tagValue": {
+                        "value": "[parameters('tagValue')]"
+                    }
+                },
+                "identity": {
+                    "type": "[parameters('managedIdentity')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Batch/batchAccounts",
+            "apiVersion": "2017-05-01",
+            "name": "[guid('Add or replace a tag on resources')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c",
+                "principalId": "7115ac1b-26b2-41b3-97f9-75fc69388ae3",
+                "scope": "/subscriptions/029536b6-f6c6-4f73-af5f-565d7c4cc579/resourceGroups/rg-dev-fusion-001"
+            }
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "applyPolicyToRoot",
+            "properties": {
+                "displayName": "Deploy Dependency agent for Linux virtual machines",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4da21710-ce6f-4e06-8cdb-5cc4c93ffbee",
+                "scope": "/providers/Microsoft.Management/managementGroups/ROOT"
+            }
+        }
+    ],
+    "outputs": {}
+}

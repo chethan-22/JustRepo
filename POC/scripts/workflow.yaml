@@ -1,0 +1,140 @@
+name: Migrate Blueprints to Template Specs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install PowerShell
+        run: |
+          sudo apt install -y powershell
+          pwsh -Command "Install-Module -Name Az -AllowClobber -Force"
+
+      - name: Update Azure PowerShell
+        run: |
+          pwsh -Command "Update-Module -Name Az"
+
+      # login to azure
+      - name: Azure Login
+        run: az login --service-principal --username ${{ secrets.ARM_CLIENT_ID }} --password ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+      
+      # Policy assignment to management group
+      - name: Apply Policy Assignment to Management group
+        run: az deployment mg create --location northeurope --name Allowed-Size-SKUs --management-group-id HLTH --template-file "./test-json/test.json"
+      
+      - name: Subscription Set
+        run: az account set --subscription d507b04a-48db-486f-8629-4c48bdbdb1b0
+
+      - name: List of TS
+        run: az ts list
+        # run: az ts show --name lasttest --resource-group RG-PRD-H-AM-AZAPPS-001 --version "1.4"
+
+      # Creation of template specs with version when new json file pushes to github repo
+      - name: Create Template Spec
+        run: |
+          az ts create --location eastus --name MyTemplatSpec --resource-group RG-PRD-H-AM-AZAPPS-001 --template-file "./test-json/test.json" --version 1.0
+          export TEMPLATE_SPEC_ID=$(az ts show --name "MyTemplatSpec" --query id -o tsv)
+      
+      - name: Import Template
+        run: |
+          az ts import --name "MyTemplateSpec" --template-file "./test-json/chetan.json"
+      
+      - name: Create Template Spec Version
+        run: |
+          az ts version create --template-spec $TEMPLATE_SPEC_ID --version "1.0" --template-file "./test-json/chetan.json" --description "Initial version"
+      
+      #az deploymentmanager template-spec create-update --resource-group RG-DEV-EU-CTSHARED-001 --name MySubscriptionPolicy --management-group-id SBX --template-file .\test-json\chetan.json
+         
+      #az deployment group create --resource-group <your-resource-group-name> --template-uri https://raw.githubusercontent.com/<username>/<repository>/main/path/to/policyAssignmentTemplate.json
+      
+      # - name: Azure Login
+      #   run: az login --tenant cc7f83dd-bc5a-4682-9b3e-062a900202a2
+
+      # - name: Login to Azure
+      #   run: |
+#az login --tenant cc7f83dd-bc5a-4682-9b3e-062a900202a2 -u adm_GollaC01@matthey.com
+#az login --tenant cc7f83dd-bc5a-4682-9b3e-062a900202a2 -u ${{ secrets.AZURE_LOGIN_CODE }}
+      
+      # - name: Run az commands
+      #   run: |
+      #     az account show
+      #     az group list
+        
+      # - name: Export Template Specs to JSON files
+      #   run: |
+      #     Get-AzTemplateSpec | Export-AzJson -OutputFolder template-specs
+
+      # - name: Commit JSON files
+      #   run: |
+      #     git add template-specs/*.json
+      #     git commit -m "Export template specs to JSON files"
+      #     git push origin main
+
+      # - name: Upload JSON files to GitHub repository
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: template-specs
+      #     path: template-specs
+
+      # - name: Export Template Specs
+      #   env:
+      #     LOCAL_DIRECTORY_PATH: "C:\Users\cg76035\Desktop\output"
+      #   run: |
+      #     $templateSpecs = Get-AzTemplateSpec
+
+      #     foreach ($templateSpec in $templateSpecs) {
+      #       Export-AzTemplateSpec -TemplateSpecName $templateSpec.Name -OutputFile "$templateSpec.Name.json"
+
+      #       Copy-Item "$templateSpec.Name.json" "$LOCAL_DIRECTORY_PATH"
+      #     }
+
+      # - name: Commit the JSON files
+      #   run: |
+      #     git add "$LOCAL_DIRECTORY_PATH"/*.json
+      #     git commit -m "Export Template Specs"
+      #     git push origin main
+
+      # - name: Log in to Azure
+      #   uses: azure/login@v3
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # - name: Export Azure Blueprints to JSON files
+      #   run: |
+      #     pwsh -Command "Export-AzBlueprintDefinition -BlueprintName <BlueprintName> -OutputFile <BlueprintName>.json"
+
+      # - name: Convert Azure Blueprints JSON files to Template Specs
+      #   run: |
+      #     pwsh -Command "ConvertFrom-AzJson -InputFile <BlueprintName>.json -OutputFile <TemplateSpecFolder>\<BlueprintName>.TemplateSpec.json"
+
+      # - name: Assign policies to the management group level
+      #   run: |
+      #     pwsh -Command "Assign-AzPolicy -PolicyDefinitionFile <PolicyDefinitionsFolder>\<BlueprintName>.PolicyDefinition.json -Scope <ManagementGroupId>"
+
+      # - name: Commit the changes
+      #   run: |
+      #     git commit -am "Migrate Blueprints to Template Specs"
+
+      # - name: Push the changes
+      #   run: |
+      #     git push origin master
+
+
+
+      # - name: Remove PowerShell
+      #   run: |
+      #     sudo apt remove -y powershell
+
+      # - name: Install PowerShell
+      #   run: |
+      #     sudo apt install -y powershell
+      
+      # - name: Check for Azure PowerShell
+      #   run: |
+      #     pwsh -Command "Get-Module -Name Az" | Where-Object { $_.Name -eq "Az" }

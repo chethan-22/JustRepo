@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "Audit",
+                "Disabled"
+              ],
+              "defaultValue": "Audit"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Authorized IP ranges should be defined on Kubernetes Services",
+            "properties": {
+                "displayName": "Authorized IP ranges should be defined on Kubernetes Services",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0e246bcf-5f6f-4f87-bc6f-775d4712c7ea",
+                "description": "Restrict access to the Kubernetes Service Management API by granting API access only to IP addresses in specific ranges. It is recommended to limit access to authorized IP ranges to ensure that only applications from allowed networks can access the cluster.",
+                "metadata": {
+                    "version": "2.0.1",
+                    "category": "Security Center"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

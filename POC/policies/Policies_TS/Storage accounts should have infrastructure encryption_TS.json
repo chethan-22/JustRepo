@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "description": "Enable or disable the execution of the audit policy",
+                "displayName": "Effect"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Audit"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Storage accounts should have infrastructure encryption",
+            "properties": {
+                "displayName": "Storage accounts should have infrastructure encryption",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4733ea7b-a883-42fe-8cac-97454c2a9e4a",
+                "notScopes": [
+                    "/subscriptions/79c4a2ea-505d-49ad-8a96-5321f9aae391",
+                    "/subscriptions/015dc383-b557-4551-a037-5037b98b50ff",
+                    "/subscriptions/dd034f85-da33-4dc7-80e1-6629abd19636",
+                    "/subscriptions/4bdb6d31-d1e1-48ee-9e64-a58207d6243b",
+                    "/subscriptions/d7830129-7b32-421b-9dc2-99b1bf1809e9",
+                    "/subscriptions/3ecb84df-6568-4880-87d4-7c956ac0ea09"
+                ],
+                "description": "Enable infrastructure encryption for higher level of assurance that the data is secure. When infrastructure encryption is enabled, data in a storage account is encrypted twice.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Storage"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    }
+                }
+            }
+        }
+    ]
+}

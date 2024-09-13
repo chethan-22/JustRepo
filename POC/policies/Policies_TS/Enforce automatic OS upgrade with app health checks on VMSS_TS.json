@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Require automatic OS image patching on Virtual Machine Scale Sets",
+            "properties": {
+                "displayName": "Require automatic OS image patching on Virtual Machine Scale Sets",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/465f0161-0087-490a-9ad9-ad6217f4f43a",
+                "description": "This policy enforces enabling automatic OS image patching on Virtual Machine Scale Sets to always keep Virtual Machines secure by safely applying latest security patches every month.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Compute"
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}

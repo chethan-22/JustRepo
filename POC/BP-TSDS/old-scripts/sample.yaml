@@ -1,0 +1,35 @@
+name: Azure Blueprint Workflow
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install PowerShell
+      uses: actions/setup-powershell@v2
+    - name: Export Azure Blueprints to JSON
+      run: |
+        # Add commands to export Azure Blueprints to JSON
+        # Example: az blueprints export --name <blueprint-name> --resource-group <resource-group> --output <output-file>
+    - name: Convert JSON files to Template Specs
+      run: |
+        # Add commands to convert JSON files to Template Specs
+        # Example: Convert-JsonToTemplateSpec -InputFile <input-json-file> -OutputFile <output-template-spec>
+    # Skip the following steps:
+    # - name: Import Template Specs into Azure Policy
+    #   run: |
+    #     # Add commands to import Template Specs into Azure Policy
+    # - name: Assign policies to management group level
+    #   run: |
+    #     # Add commands to assign policies to management group level
+    - name: Commit and push changes
+      run: |
+        git config --global user.email "<your-email>"
+        git config --global user.name "<your-name>"
+        git add .
+        git commit -m "Update Azure Blueprints"
+        git push
+
+        tenant id cc7f83dd-bc5a-4682-9b3e-062a900202a2

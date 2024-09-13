@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedIdentity": {
+            "type": "string",
+            "metadata": {
+                "description": "Managed identity used for remediation (for 'DeployIfNotExists' effect)"
+            },
+            "defaultValue": "SystemAssigned"
+        },
+        "builtInRoleType": {
+            "type": "string",
+            "metadata": {
+                "description": "Built-in role to assign"
+            },
+            "defaultValue": "SQLSecurityManager"
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the resources."
+            },
+            "defaultValue": "WestEurope"
+        }
+    },
+    "variables": {
+        "Contributor": "/providers/Microsoft.Authorization/roleDefinitions/056cd41c-7e88-42e1-933e-88ba6a50c9c3"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "[guid('ConfigureAzureDefendertobeenabledonSQLservers')]",
+            "properties": {
+                "displayName": "Configure Azure Defender to be enabled on SQL servers",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/36d49e87-48c4-4f2e-beed-ba4ed02b71f5",
+                "description": "Enable Azure Defender on your Azure SQL Servers to detect anomalous activities indicating unusual and potentially harmful attempts to access or exploit databases.",
+                "metadata": {
+                    "version": "2.1.0",
+                    "category": "SQL"
+                },
+                "parameters": {}
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2017-05-01",
+            "name": "[guid(resourceGroup().id)]",
+            "location": "[parameters('location')]",
+            "builtInRoleType": "[parameters('builtInRoleType')]",
+            "managedIdentity": "[parameters('managedIdentity')]",
+            "properties": {
+                "roleDefinitionId": "[variables(parameters('builtInRoleType'))]",
+                "principalId": "968adcac-0aab-4e2c-a4d2-0a700ed175e4",
+                "scope": "/subscriptions/029536b6-f6c6-4f73-af5f-565d7c4cc579"
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Deploy network watcher when virtual networks are created",
+            "properties": {
+                "displayName": "Deploy network watcher when virtual networks are created",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a9b99dd8-06c5-4317-8629-9d86a3c6e7d9",
+                "description": "This policy creates a network watcher resource in regions with virtual networks. You need to ensure existence of a resource group named networkWatcherRG, which will be used to deploy network watcher instances.",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Network"
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}

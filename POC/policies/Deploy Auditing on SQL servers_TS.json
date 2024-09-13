@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "effect": {
+          "type": "string",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          },
+          "allowedValues": [
+            "DeployIfNotExists",
+            "Disabled"
+          ],
+          "defaultValue": "DeployIfNotExists"
+        },
+        "retentionDays": {
+          "type": "string",
+          "metadata": {
+            "description": "The value in days of the retention period (0 indicates unlimited retention)",
+            "displayName": "Retention days (optional, 180 days if unspecified)"
+          },
+          "defaultValue": "180"
+        },
+        "storageAccountsResourceGroup": {
+          "type": "string",
+          "metadata": {
+            "displayName": "Resource group name for storage accounts",
+            "description": "Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared by all servers in that region). Important - for proper operation of Auditing do not delete or rename the resource group or the storage accounts.",
+            "strongType": "existingResourceGroups"
+          }
+        }
+      },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Configure SQL servers to have auditing enabled",
+            "properties": {
+                "displayName": "Configure SQL servers to have auditing enabled",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/f4c68484-132f-41f9-9b6d-3e4b1cb55036",
+                "description": "To ensure the operations performed against your SQL assets are captured, SQL servers should have auditing enabled. This is sometimes required for compliance with regulatory standards.",
+                "metadata": {
+                    "version": "3.0.0",
+                    "category": "SQL"
+                },
+                "parameters": {
+                    "effect": {
+                        "value": "[parameters('effect')]"
+                    },
+                    "retentionDays": {
+                        "value": "[parameters('retentionDays')"
+                    },
+                    "storageAccountsResourceGroup": {
+                        "value": "[parameters('storageAccountsResourceGroup')]"
+                    }
+                }
+            }
+        }
+    ]
+}

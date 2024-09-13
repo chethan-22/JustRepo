@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "listOfAllowedSKUs": {
+            "type": "array",
+            "metadata": {
+                "description": "The list of size SKUs that can be specified for virtual machines.",
+                "displayName": "Allowed Size SKUs"
+            },
+            "defaultValue": [
+                "standard_f8s_v2"
+            ]
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Allowed VM Size SKUs",
+            "properties": {
+                "displayName": "Allowed Virtual Machine Size SKUs",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/cccc23c7-8427-4f53-ad12-b6a63eb452b3",
+                "description": "This policy enables you to specify a set of virtual machine size SKUs that your organization can deploy.",
+                "metadata": {
+                    "version": "1.0.1",
+                    "category": "Compute"
+                },
+                "parameters": {
+                    "listOfAllowedSKUs": {
+                        "value": "[parameters('listOfAllowedSKUs')]"
+                    }
+                }
+            }
+        }
+    ]
+}

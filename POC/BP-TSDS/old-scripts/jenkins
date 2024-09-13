@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Other build steps
+                    withCredentials([string(credentialsId: 'YOUR_NPM_TOKEN_ID', variable: 'NPM_TOKEN')]) {
+                        sh '''
+                            npm config set @goodhands:registry=https://npm.pkg-github.com
+                            npm config set //npm.pkg-github.com/:_authToken=$NPM_TOKEN
+                            # Additional npm commands or build steps
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}

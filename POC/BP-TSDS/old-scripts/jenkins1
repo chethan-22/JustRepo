@@ -1,0 +1,42 @@
+
+pipeline {
+
+    agent any
+
+    environment {
+
+        NPM_TOKEN = credentials('YOUR_NPM_TOKEN_ID') // Use the actual ID of your NPM token in Jenkins credentials
+
+    }
+
+    stages {
+
+        stage('Build') {
+
+            steps {
+
+                script {
+
+                    // Other build steps
+
+                    sh '''
+
+                        echo "@your-scope:registry=https://your-registry-url" > .npmrc
+
+                        echo "//your-registry-url/:_authToken=${NPM_TOKEN}" >> .npmrc
+
+                        npm install
+
+                        # Additional npm commands or build steps
+
+                    '''
+
+                }
+
+            }
+
+        }
+
+    }
+
+}

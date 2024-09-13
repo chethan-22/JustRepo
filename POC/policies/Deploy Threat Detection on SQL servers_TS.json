@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Configure Azure Defender to be enabled on SQL servers",
+            "properties": {
+                "displayName": "Configure Azure Defender to be enabled on SQL servers",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/36d49e87-48c4-4f2e-beed-ba4ed02b71f5",
+                "description": "Enable Azure Defender on your Azure SQL Servers to detect anomalous activities indicating unusual and potentially harmful attempts to access or exploit databases.",
+                "metadata": {
+                    "version": "2.1.0",
+                    "category": "SQL"
+                },
+                "parameters": {}
+            }
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "listOfImageIdToInclude": {
+            "type": "array",
+            "metadata": {
+                "description": "Example value: '/subscriptions/<subscriptionId>/resourceGroups/YourResourceGroup/providers/Microsoft.Compute/images/ContosoStdImage'",
+                "displayName": "Optional: List of VM images that have supported Linux OS to add to scope"
+            },
+            "defaultValue": []
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "Deploy Dependency agent for Linux virtual machines",
+            "properties": {
+                "displayName": "Deploy Dependency agent for Linux virtual machines",
+                "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4da21710-ce6f-4e06-8cdb-5cc4c93ffbee",
+                "description": "Deploy Dependency agent for Linux virtual machines if the VM Image (OS) is in the list defined and the agent is not installed.",
+                "metadata": {
+                    "version": "5.0.0",
+                    "category": "Monitoring"
+                },
+                "parameters": {
+                    "listOfImageIdToInclude": {
+                        "value": "[parameters('listOfImageIdToInclude')]"
+                    }
+                }
+            }
+        }
+    ]
+}

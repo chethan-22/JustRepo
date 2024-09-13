@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-09-01",
+            "name": "applyPolicyToResourceGroup1",
+            "properties": {
+                "displayName": "Apply Policy 1 to Management Group",
+                "policyDefinitionId": "/providers/Microsoft.Management/managementGroups/ROOT/providers/Microsoft.Authorization/policyDefinitions/cf069b26-1735-4d45-a1b3-f9f64538f8d8",
+                "scope": "/providers/Microsoft.Management/managementGroups/ROOT"
+            }
+        }
+    ],
+    "outputs": {}
+}
